@@ -100,6 +100,20 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 model_id = "microsoft/bitnet-b1.58-2B-4T"
 
+# if len(sys.argv) < 3:
+#     print("Usage: python prompt.py '<your prompt>' '<your question>'")
+#     sys.exit(1)
+
+# toto: add flags for these instead of positional args
+# prompt = sys.argv[1] || "You are a helpful AI assistant."
+# question = sys.argv[2] || "How are you?"
+
+prompt = "You are a helpful AI assistant."
+question = "How are you?"
+
+print(f"prompt=>{prompt}<\nquestion=>{question}<")
+
+
 # Load tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
@@ -109,8 +123,8 @@ model = AutoModelForCausalLM.from_pretrained(
 
 # Apply the chat template
 messages = [
-    {"role": "system", "content": "You are a helpful AI assistant."},
-    {"role": "user", "content": "How are you?"},
+    {"role": "system", "content": prompt},
+    {"role": "user", "content": question},
 ]
 prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 chat_input = tokenizer(prompt, return_tensors="pt").to(model.device)
@@ -118,7 +132,7 @@ chat_input = tokenizer(prompt, return_tensors="pt").to(model.device)
 # Generate response
 chat_outputs = model.generate(**chat_input, max_new_tokens=50)
 response = tokenizer.decode(chat_outputs[0][chat_input['input_ids'].shape[-1]:], skip_special_tokens=True) # Decode only the response part
-print("\nAssistant Response:", response)
+print("\nAssistant Response:", respoznse)
 EOF
 
 podman build -t bitnet-image .
