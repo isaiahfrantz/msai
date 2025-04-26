@@ -17,3 +17,5 @@ while getopts ":c:v:" opt; do
 done
 
 podman run -it --rm $vol $con bash
+
+# ./container-bash -v $PWD
